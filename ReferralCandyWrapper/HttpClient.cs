@@ -4,6 +4,7 @@ using ReferralCandyWrapper.Messages;
 using System;
 using System.IO;
 using System.Net;
+using System.Text;
 
 namespace ReferralCandyWrapper
 {
@@ -52,7 +53,11 @@ namespace ReferralCandyWrapper
 
         private HttpWebRequest GenerateHttpWebRequest(IRequest request)
         {
-            var requestUriString = string.Format("{0}{1}.json", defaultApiUrl, request.GetMethodName());
+            var requestUriString = string.Format("{0}{1}.json{2}", 
+                defaultApiUrl, 
+                request.GetMethodName(),
+                request.GetHttpMethod() == "GET" ? AppendQueryString(request) : string.Empty);
+
             var webRequest = (HttpWebRequest)WebRequest.Create(requestUriString);
             webRequest.Method = request.GetHttpMethod();
             webRequest.ServicePoint.Expect100Continue = false;
@@ -60,10 +65,13 @@ namespace ReferralCandyWrapper
 
             if (webRequest.Method != WebRequestMethods.Http.Get)
             {
+                var byteArray = Encoding.UTF8.GetBytes(request.ToQueryString(accessID, secretKey));
                 webRequest.ContentType = "application/x-www-form-urlencoded";
-                using (var requestWriter = new StreamWriter(webRequest.GetRequestStream()))
+                webRequest.ContentLength = byteArray.Length;
+
+                using (var stream = webRequest.GetRequestStream())
                 {
-                    requestWriter.Write(request.ToQueryString(accessID, secretKey));
+                    stream.Write(byteArray, 0, byteArray.Length);
                 }
             }
 
@@ -92,6 +100,11 @@ namespace ReferralCandyWrapper
                     throw;
                 }
             }
+        }
+
+        private string AppendQueryString(IRequest request)
+        {
+            return string.Format("?{0}", request.ToQueryString(accessID, secretKey));
         }
     }
 }

@@ -1,27 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Specialized;
 
 namespace ReferralCandyWrapper.Messages
 {
     public class VerifyRequest : BaseRequest
     {
-        public VerifyRequest() : base("verify", "POST")
+        public VerifyRequest() : base("verify", "GET")
         {
         }
-
-        public override string ToQueryString(string accessID, string secretKey)
+        
+        protected internal override NameValueCollection GetNameValueCollection(string accessID)
         {
-            var paramList = new List<string>();
-            paramList.Add(string.Format("accessID={0}", accessID));
-            paramList.Add(string.Format("timestamp={0}", GetUnixTimestamp()));
+            var collection = new NameValueCollection();
+            collection.Add("accessID", accessID);
+            collection.Add("timestamp", Convert.ToString(Common.GetUnixTimestamp()));
 
-            var orderedParamString = string.Join("", paramList.OrderBy(p => p));
-            var signature = GetSignature(string.Format("{0}{1}", secretKey, orderedParamString));
-            var queryString = string.Format("{0}&signature={1}",
-                string.Join("&", paramList),
-                signature);
-
-            return queryString;
+            return collection;
         }
     }
 }

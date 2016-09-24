@@ -1,5 +1,4 @@
 ﻿using ReferralCandyWrapper.Messages;
-using System;
 
 namespace ReferralCandyWrapper
 {
@@ -9,7 +8,7 @@ namespace ReferralCandyWrapper
 
         public ReferralCandy(string accessID, string secretKey)
         {
-            this.httpClient = new HttpClient(accessID, secretKey);
+            httpClient = new HttpClient(accessID, secretKey);
         }
 
         public Response Verify(VerifyRequest request)
@@ -17,9 +16,9 @@ namespace ReferralCandyWrapper
             return httpClient.ProcessRequest(request);
         }
 
-        public Response Purchase()
+        public Response Purchase(PurchaseRequest request)
         {
-            throw new NotImplementedException();
+            return httpClient.ProcessRequest(request);
         }
 
     }

@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common.cs" />
     <Compile Include="Cryptography.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="HttpClient.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="IReferralCandy.cs" />
     <Compile Include="Messages\BaseRequest.cs" />
     <Compile Include="Messages\IRequest.cs" />
+    <Compile Include="Messages\PurchaseRequest.cs" />
     <Compile Include="Messages\Response.cs" />
     <Compile Include="Messages\VerifyRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

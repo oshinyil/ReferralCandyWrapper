@@ -5,6 +5,6 @@ namespace ReferralCandyWrapper
     public interface IReferralCandy
     {
         Response Verify(VerifyRequest request);
-        Response Purchase();
+        Response Purchase(PurchaseRequest request);
     }
 }

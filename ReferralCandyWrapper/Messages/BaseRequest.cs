@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 
 namespace ReferralCandyWrapper.Messages
 {
@@ -13,16 +15,6 @@ namespace ReferralCandyWrapper.Messages
             this.httpMethod = httpMethod;
         }
 
-        protected static int GetUnixTimestamp()
-        {
-            return (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-        }
-
-        protected static string GetSignature(string queryString)
-        {
-            return Cryptography.GetMd5Hash(queryString);
-        }
-
         public string GetMethodName()
         {
             return methodName;
@@ -33,6 +25,38 @@ namespace ReferralCandyWrapper.Messages
             return httpMethod;
         }
 
-        public abstract string ToQueryString(string accessID, string secretKey);
+        protected internal static List<string> ToParamList(NameValueCollection nameValueCollection)
+        {
+            return (from key in nameValueCollection.AllKeys
+                    from value in nameValueCollection.GetValues(key)
+                    select string.Format("{0}={1}", key, value))
+                    .ToList();
+        }
+
+        protected internal static string AppendSignature(string queryString, string signature)
+        {
+            return string.Format("{0}&signature={1}",
+                queryString,
+                signature);
+        }
+
+        protected internal static string GetSignature(List<string> paramList, string secretKey)
+        {
+            var orderedParamString = string.Join("", paramList.OrderBy(p => p));
+            return Cryptography.GetMd5Hash(string.Format("{0}{1}", secretKey, orderedParamString));
+        }
+
+        protected internal abstract NameValueCollection GetNameValueCollection(string accessID);
+
+        public string ToQueryString(string accessID, string secretKey)
+        {
+            var collection = GetNameValueCollection(accessID);
+            var paramList = ToParamList(collection);
+            var signature = GetSignature(paramList, secretKey);
+
+            return AppendSignature(
+                string.Join("&", paramList),
+                signature);
+        }
     }
 }

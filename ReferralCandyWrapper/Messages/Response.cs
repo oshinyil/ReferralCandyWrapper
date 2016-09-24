@@ -10,7 +10,7 @@ namespace ReferralCandyWrapper.Messages
         [JsonProperty("message")]
         public string Message { get; set; }
 
-        [JsonProperty("messagereferralcorner_url")]
+        [JsonProperty("referralcorner_url")]
         public string ReferralCornerUrl { get; set; }
     }
 }

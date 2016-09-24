@@ -4,7 +4,7 @@ namespace ReferralCandyWrapper
 {
     public enum HttpCode
     {
-        [Description("API Call was successful.")]
+        [Description("API call was successful.")]
         Successful = 200,
 
         [Description("You've made an error in your request. See the message field in the response for details.")]
@@ -13,7 +13,7 @@ namespace ReferralCandyWrapper
         [Description("Authentication credentials provided were incorrect.")]
         IncorrectCredentials = 401,
 
-        [Description("Unknown API Method.")]
+        [Description("Unknown API method.")]
         UnknownMethod = 404,
 
         [Description("A temporary internal server error.")]

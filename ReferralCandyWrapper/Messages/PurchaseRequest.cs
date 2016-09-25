@@ -14,6 +14,7 @@ namespace ReferralCandyWrapper.Messages
         public string UserAgent { get; set; }
         public decimal InvoiceAmount { get; set; }
         public string CurrencyCode { get; set; }
+        public string ExternalReferenceID { get; set; }
 
         public PurchaseRequest() : base("purchase", "POST")
         {
@@ -33,6 +34,7 @@ namespace ReferralCandyWrapper.Messages
             collection.Add("user_agent", UserAgent ?? string.Empty);
             collection.Add("invoice_amount", InvoiceAmount.ToString("N2"));
             collection.Add("currency_code", CurrencyCode ?? string.Empty);
+            collection.Add("external_reference_id", ExternalReferenceID ?? string.Empty);
 
             return collection;
         }

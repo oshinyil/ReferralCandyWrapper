@@ -29,7 +29,8 @@ namespace ReferralCandyConsoleClient
                 BrowserIP = "172.0.0.1",
                 UserAgent = "Chrome",
                 OrderDateTime = DateTime.Now,
-                InvoiceAmount = 1.00M
+                InvoiceAmount = 1.00M,
+                ExternalReferenceID = "A123"
             };
 
             response = referralCandy.Purchase(purchaseRequest);
